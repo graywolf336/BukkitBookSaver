@@ -34,21 +34,24 @@ public class BukkitBookSaverMain extends JavaPlugin {
 				BookMeta bm = (BookMeta)p.getItemInHand().getItemMeta();
 				
 				if(bm.hasPages()) {
-					File f = new File(this.getDataFolder(), ChatColor.stripColor(bm.getDisplayName()) + ".txt");
+					File f = new File(this.getDataFolder(), ChatColor.stripColor(bm.getTitle()) + ".txt");
 
 					try {
 						f.createNewFile();
 						BufferedWriter b = new BufferedWriter(new FileWriter(f));
 						
 						b.newLine();
+						int page = 1;
 						for(String s : bm.getPages()) {
-							b.write(s);
+							b.write("-------------- PAGE " + page + " --------------");
+							b.newLine();
+							b.write(ChatColor.stripColor(s));
 							b.newLine();
 						}
 						b.close();
 						
-						this.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Successfully wrote " + ChatColor.stripColor(bm.getDisplayName()) + " to file.");
-						p.sendMessage(ChatColor.GREEN + "Successfully wrote " + ChatColor.stripColor(bm.getDisplayName()) + " to file.");
+						this.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Successfully wrote " + ChatColor.stripColor(bm.getTitle()) + " to file.");
+						p.sendMessage(ChatColor.GREEN + "Successfully wrote " + ChatColor.stripColor(bm.getTitle()) + " to file.");
 						this.count++;
 					}catch(Exception e) {
 						e.printStackTrace();
