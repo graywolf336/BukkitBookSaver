@@ -13,6 +13,18 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class BukkitBookSaverMain extends JavaPlugin {
+	private int count;
+	
+	public void onEnable() {
+		this.getLogger().info("Saving all the books. one book at a time!");
+		this.count = 0;
+	}
+	
+	public void onDisable() {
+		this.getLogger().info("Saved " + this.count + " books this go around! " + (this.count > 0 ? "Yay!" : "Awww :("));
+		this.count = 0;
+	}
+	
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
 		if(sender instanceof Player) {
 			Player p = (Player)sender;
@@ -35,6 +47,7 @@ public class BukkitBookSaverMain extends JavaPlugin {
 						
 						this.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Successfully wrote " + ChatColor.stripColor(bm.getDisplayName()) + " to file.");
 						p.sendMessage(ChatColor.GREEN + "Successfully wrote " + ChatColor.stripColor(bm.getDisplayName()) + " to file.");
+						this.count++;
 					}catch(Exception e) {
 						e.printStackTrace();
 						p.sendMessage(ChatColor.RED + "Failure! " + e.getClass().getSimpleName());
