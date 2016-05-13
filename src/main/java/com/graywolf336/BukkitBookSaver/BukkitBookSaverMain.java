@@ -36,6 +36,7 @@ public class BukkitBookSaverMain extends JavaPlugin {
 					File f = new File(this.getDataFolder(), ChatColor.stripColor(bm.getDisplayName()) + ".txt");
 
 					try {
+						f.mkdirs();
 						f.createNewFile();
 						BufferedWriter b = new BufferedWriter(new FileWriter(f));
 						
