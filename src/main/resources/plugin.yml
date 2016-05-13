@@ -1,0 +1,9 @@
+name: BukkitBookSaver
+main: com.graywolf336.BukkitBookSaver.BukkitBookSaverMain
+version: maven-version-number
+description: Need written books to be saved to file? I am your solution.
+authors: [graywolf336]
+load: POSTWORLD
+commands:
+    savebook:
+        description: Saves a book to file.
