@@ -39,8 +39,7 @@ public class BukkitBookSaverMain extends JavaPlugin {
 					try {
 						f.createNewFile();
 						BufferedWriter b = new BufferedWriter(new FileWriter(f));
-						
-						b.newLine();
+
 						int page = 1;
 						for(String s : bm.getPages()) {
 							b.write("-------------- PAGE " + page + " --------------");
