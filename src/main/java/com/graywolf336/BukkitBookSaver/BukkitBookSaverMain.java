@@ -47,6 +47,7 @@ public class BukkitBookSaverMain extends JavaPlugin {
 							b.newLine();
 							b.write(ChatColor.stripColor(s));
 							b.newLine();
+							page++;
 						}
 						b.close();
 						
