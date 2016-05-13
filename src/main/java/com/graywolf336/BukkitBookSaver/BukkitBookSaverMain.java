@@ -33,6 +33,7 @@ public class BukkitBookSaverMain extends JavaPlugin {
 						}
 						b.close();
 						
+						this.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Successfully wrote " + ChatColor.stripColor(bm.getDisplayName()) + " to file.");
 						p.sendMessage(ChatColor.GREEN + "Successfully wrote " + ChatColor.stripColor(bm.getDisplayName()) + " to file.");
 					}catch(Exception e) {
 						e.printStackTrace();
