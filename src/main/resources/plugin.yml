@@ -8,4 +8,4 @@ commands:
     save-book:
         description: Saves a book to file.
     reload-book-saver:
-    	description: Reloads the config file for the Book Saver plugin.
+        description: Reloads the config file for the Book Saver plugin.
