@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.graywolf336.BukkitBookSaver.cmds.ReloadBookSaverCommand;
 import com.graywolf336.BukkitBookSaver.cmds.SaveBookCommand;
 import com.graywolf336.BukkitBookSaver.enums.Settings;
 
@@ -23,6 +24,7 @@ public class BukkitBookSaverMain extends JavaPlugin {
 		SaveBookCommand cmd = new SaveBookCommand(this);
 		this.getCommand("save-book").setExecutor(cmd);
 		this.getCommand("save-book").setTabCompleter(cmd);
+		this.getCommand("reload-book-saver").setExecutor(new ReloadBookSaverCommand(this));
 	}
 	
 	public void onDisable() {
