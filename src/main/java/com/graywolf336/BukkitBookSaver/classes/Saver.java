@@ -26,7 +26,7 @@ public class Saver {
     }
     
     public boolean isValidBook(ItemStack item) {
-        return item != null && item.getType() == Material.WRITTEN_BOOK && !item.hasItemMeta() || item.getItemMeta() instanceof BookMeta;
+        return item != null && item.getType() == Material.WRITTEN_BOOK && !item.hasItemMeta() && item.getItemMeta() instanceof BookMeta;
     }
     
     public boolean saveBook(CommandSender sender, BookMeta data) {
