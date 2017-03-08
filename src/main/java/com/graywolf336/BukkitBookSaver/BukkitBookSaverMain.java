@@ -4,12 +4,15 @@ import java.io.File;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.graywolf336.BukkitBookSaver.classes.Saver;
 import com.graywolf336.BukkitBookSaver.cmds.ReloadBookSaverCommand;
 import com.graywolf336.BukkitBookSaver.cmds.SaveBookCommand;
+import com.graywolf336.BukkitBookSaver.cmds.SaveBooksInChestCommand;
 import com.graywolf336.BukkitBookSaver.enums.Settings;
 
 public class BukkitBookSaverMain extends JavaPlugin {
     private File savesFolder;
+    private Saver saver;
 	private int count;
 	
 	public void onEnable() {
@@ -22,10 +25,13 @@ public class BukkitBookSaverMain extends JavaPlugin {
 		this.savesFolder = new File(this.getDataFolder(), "books");
 		this.savesFolder.mkdirs();
 		
+		this.saver = new Saver(this);
+		
 		SaveBookCommand cmd = new SaveBookCommand(this);
 		this.getCommand("save-book").setExecutor(cmd);
 		this.getCommand("save-book").setTabCompleter(cmd);
 		this.getCommand("reload-book-saver").setExecutor(new ReloadBookSaverCommand(this));
+		this.getCommand("save-books-in-chest").setExecutor(new SaveBooksInChestCommand(this));
 
 		this.getLogger().info("Saving all the books, one book at a time!");
 	}
@@ -48,6 +54,10 @@ public class BukkitBookSaverMain extends JavaPlugin {
 	
 	public File getSavesFolder() {
 	    return this.savesFolder;
+	}
+	
+	public Saver getSaver() {
+	    return this.saver;
 	}
 	
 	public int getSavedCount() {

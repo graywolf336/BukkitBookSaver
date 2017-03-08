@@ -9,3 +9,5 @@ commands:
         description: Saves a book to file.
     reload-book-saver:
         description: Reloads the config file for the Book Saver plugin.
+    save-books-in-chest:
+        description: Saves all of the books inside of the chest a player is looking at.
