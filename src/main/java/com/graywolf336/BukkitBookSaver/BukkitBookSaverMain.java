@@ -1,70 +1,44 @@
 package com.graywolf336.BukkitBookSaver;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.graywolf336.BukkitBookSaver.cmds.SaveBookCommand;
+import com.graywolf336.BukkitBookSaver.enums.Settings;
+
 public class BukkitBookSaverMain extends JavaPlugin {
+    private File savesFolder;
 	private int count;
 	
 	public void onEnable() {
-		this.getLogger().info("Saving all the books. one book at a time!");
+	    Settings.setPlugin(this);
+		this.getLogger().info("Saving all the books, one book at a time!");
 		this.count = 0;
 		this.getDataFolder().mkdirs();
+		
+		this.savesFolder = new File(this.getDataFolder(), "books");
+		this.savesFolder.mkdirs();
+		
+		SaveBookCommand cmd = new SaveBookCommand(this);
+		this.getCommand("save-book").setExecutor(cmd);
+		this.getCommand("save-book").setTabCompleter(cmd);
 	}
 	
 	public void onDisable() {
-		this.getLogger().info("Saved " + this.count + " books this go around! " + (this.count > 0 ? "Yay!" : "Awww :("));
+		this.getLogger().info("Saved " + this.count + " books this go around! " + (this.count > 0 ? "Yay!!" : "Awww :("));
 		this.count = 0;
 	}
 	
-	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
-		if(sender instanceof Player) {
-			Player p = (Player)sender;
-			
-			if(p.getItemInHand() != null && p.getItemInHand().getType() == Material.WRITTEN_BOOK && p.getItemInHand().hasItemMeta()) {
-				BookMeta bm = (BookMeta)p.getItemInHand().getItemMeta();
-				
-				if(bm.hasPages()) {
-					File f = new File(this.getDataFolder(), ChatColor.stripColor(bm.getTitle()) + ".txt");
-
-					try {
-						f.createNewFile();
-						BufferedWriter b = new BufferedWriter(new FileWriter(f));
-
-						int page = 1;
-						for(String s : bm.getPages()) {
-							b.write("-------------- PAGE " + page + " --------------");
-							b.newLine();
-							b.write(ChatColor.stripColor(s));
-							b.newLine();
-							page++;
-						}
-						b.close();
-						
-						this.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Successfully wrote " + ChatColor.stripColor(bm.getTitle()) + " to file.");
-						p.sendMessage(ChatColor.GREEN + "Successfully wrote " + ChatColor.stripColor(bm.getTitle()) + " to file.");
-						this.count++;
-					}catch(Exception e) {
-						e.printStackTrace();
-						p.sendMessage(ChatColor.RED + "Failure! " + e.getClass().getSimpleName());
-					}
-				}
-			}else {
-				p.sendMessage(ChatColor.RED + "Written book must be in hand.");
-			}
-			
-			return true;
-		}
-		
-		return false;
+	public File getSavesFolder() {
+	    return this.savesFolder;
+	}
+	
+	public int getSavedCount() {
+	    return this.count;
+	}
+	
+	public int incrementCount() {
+	    return this.count++;
 	}
 }

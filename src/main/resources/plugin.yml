@@ -5,5 +5,7 @@ description: Need written books to be saved to file? I am your solution.
 authors: [graywolf336]
 load: POSTWORLD
 commands:
-    savebook:
+    save-book:
         description: Saves a book to file.
+    reload-book-saver:
+    	description: Reloads the config file for the Book Saver plugin.
