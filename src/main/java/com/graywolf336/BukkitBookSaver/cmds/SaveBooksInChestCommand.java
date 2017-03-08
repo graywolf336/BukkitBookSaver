@@ -31,7 +31,7 @@ public class SaveBooksInChestCommand implements CommandExecutor {
         Player p = (Player) sender;
         Block target = p.getTargetBlock((HashSet<Byte>) null, 100);
         
-        if (target.getType() != Material.CHEST || target.getType() != Material.TRAPPED_CHEST) {
+        if (target.getType() != Material.CHEST && target.getType() != Material.TRAPPED_CHEST) {
             sender.sendMessage(ChatColor.RED + "The block you're looking at must be a Chest or Trapped Chest.");
             return true;
         }
