@@ -6,7 +6,7 @@ import java.io.FileWriter;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
@@ -29,13 +29,13 @@ public class Saver {
         return item != null && item.getType() == Material.WRITTEN_BOOK && !item.hasItemMeta() || item.getItemMeta() instanceof BookMeta;
     }
     
-    public boolean saveBook(Player p, BookMeta data) {
+    public boolean saveBook(CommandSender sender, BookMeta data) {
         Book book;
         
         try {
             book = Book.fromBookMetadata(data);
         } catch (Exception e) {
-            p.sendMessage(ChatColor.RED + "The book in your hand isn't a valid book for some reason.");
+            sender.sendMessage(ChatColor.RED + "The book in your hand isn't a valid book for some reason.");
             return false;
         }
         
@@ -43,10 +43,10 @@ public class Saver {
         File f = new File(this.pl.getSavesFolder(), book.getAuthor() + "-" + book.getTitle() + ext);
         
         if (f.exists()) {
-            if (p.isOp()) {
+            if (sender.isOp()) {
                 f.delete();
             } else {
-                p.sendMessage(ChatColor.DARK_AQUA + "The book \"" + book.getAuthor() + "-" + book.getTitle() + "\" was already saved to file.");
+                sender.sendMessage(ChatColor.DARK_AQUA + "The book \"" + book.getAuthor() + "-" + book.getTitle() + "\" was already saved to file.");
                 return false;
             }
         }
@@ -59,7 +59,7 @@ public class Saver {
                 b.close();
             } catch (Exception e) {
                 e.printStackTrace();
-                p.sendMessage(ChatColor.RED + "Failure! " + e.getClass().getSimpleName());
+                sender.sendMessage(ChatColor.RED + "Failure! " + e.getClass().getSimpleName());
                 return false;
             }
         } else {
@@ -84,13 +84,13 @@ public class Saver {
                 b.close();
             } catch(Exception e) {
                 e.printStackTrace();
-                p.sendMessage(ChatColor.RED + "Failure! " + e.getClass().getSimpleName());
+                sender.sendMessage(ChatColor.RED + "Failure! " + e.getClass().getSimpleName());
                 return false;
             }
         }
         
         this.pl.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Successfully wrote \"" + book.getAuthor() + "-" + book.getTitle() + "\" to file.");
-        p.sendMessage(ChatColor.GREEN + "Successfully wrote \"" + book.getAuthor() + "-" + book.getTitle() + "\" to file.");
+        sender.sendMessage(ChatColor.GREEN + "Successfully wrote \"" + book.getAuthor() + "-" + book.getTitle() + "\" to file.");
         this.pl.incrementCount();
         
         return true;
