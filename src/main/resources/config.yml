@@ -1,0 +1,3 @@
+system:
+  debug: false
+  save-as-json: true
