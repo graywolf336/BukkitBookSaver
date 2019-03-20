@@ -16,7 +16,9 @@ public enum Settings {
     /** Whether we should be outputting debugging information. */
     DEBUG("system.debug"),
     /** Whether we should save as json or not, aka json or flatfile. */
-    JSON("system.save-as-json");
+    JSON("system.save-as-json"),
+    /** Whether we should save it in a serialized version or not. */
+    SERIALIZED("system.save-as-serialized");
 
     private static Plugin pl;
     private String path;

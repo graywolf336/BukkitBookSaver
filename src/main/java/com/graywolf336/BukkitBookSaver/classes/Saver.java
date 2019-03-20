@@ -3,10 +3,14 @@ package com.graywolf336.BukkitBookSaver.classes;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
@@ -26,14 +30,22 @@ public class Saver {
     }
     
     public boolean isValidBook(ItemStack item) {
+    	if (Settings.DEBUG.asBoolean()) {
+    		this.pl.getLogger().info("Is item not null: " + (item != null));
+    		this.pl.getLogger().info("Is item type written book: " + (item.getType() == Material.WRITTEN_BOOK) + " " + item.getType().toString());
+    		this.pl.getLogger().info("Does item has meta data: " + (item.hasItemMeta()));
+    		this.pl.getLogger().info("Item item meta data book meta: " + (item.getItemMeta() instanceof BookMeta));
+    	}
+
         return item != null && item.getType() == Material.WRITTEN_BOOK && item.hasItemMeta() && item.getItemMeta() instanceof BookMeta;
     }
     
-    public boolean saveBook(CommandSender sender, BookMeta data) {
+    public boolean saveBook(CommandSender sender, ItemStack i) {
         Book book;
         
         try {
-            book = Book.fromBookMetadata(data);
+        	BookMeta bm = (BookMeta) i.getItemMeta();
+            book = Book.fromBookMetadata(bm);
         } catch (Exception e) {
             sender.sendMessage(ChatColor.RED + "The book in your hand isn't a valid book for some reason.");
             return false;
@@ -89,10 +101,59 @@ public class Saver {
             }
         }
         
+        if (Settings.SERIALIZED.asBoolean()) {
+        	File sfile = new File(this.pl.getSerializedFolder(), book.getAuthor() + "-" + book.getTitle().replaceAll(" ", "_") + ".yml");
+        	
+        	if (sfile.exists()) {
+                if (sender.isOp()) {
+                	sfile.delete();
+                } else {
+                    sender.sendMessage(ChatColor.DARK_AQUA + "The book \"" + book.getAuthor() + " - " + book.getTitle() + "\" was already saved to file.");
+                    return false;
+                }
+            }
+        	
+            FileConfiguration sf = YamlConfiguration.loadConfiguration(sfile);
+            sf.set("book", i);
+            
+            try {
+				sf.save(sfile);
+			} catch (IOException e) {
+				e.printStackTrace();
+				sender.sendMessage(ChatColor.RED + "Failure! " + e.getClass().getSimpleName());
+                return false;
+			}
+        }
+        
+        
         this.pl.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Successfully wrote \"" + book.getAuthor() + "-" + book.getTitle() + "\" to file.");
         sender.sendMessage(ChatColor.GREEN + "Successfully wrote \"" + book.getAuthor() + "-" + book.getTitle() + "\" to file.");
         this.pl.incrementCount();
         
         return true;
+    }
+    
+    public ArrayList<String> getSeralizedBooks() {
+    	ArrayList<String> books = new ArrayList<String>();
+
+    	for(File f : this.pl.getSerializedFolder().listFiles()) {
+    		if (f.isFile()) {
+    			books.add(f.getName());
+    		}
+    	}
+    	
+    	return books;
+    }
+    
+    public ItemStack getSeralizedBook(String name) throws Exception {
+    	File sfile = new File(this.pl.getSerializedFolder(), name);
+    	
+    	if (!sfile.exists()) {
+    		throw new Exception("Invalid book name, it wasn't saved");
+        }
+    	
+        FileConfiguration sf = YamlConfiguration.loadConfiguration(sfile);
+        
+        return sf.getItemStack("book");
     }
 }

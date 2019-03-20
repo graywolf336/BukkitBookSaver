@@ -1,3 +1,4 @@
 system:
   debug: false
   save-as-json: true
+  save-as-serialized: true

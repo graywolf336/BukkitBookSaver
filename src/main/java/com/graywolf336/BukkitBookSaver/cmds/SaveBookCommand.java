@@ -9,7 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.ItemStack;
 
 import com.graywolf336.BukkitBookSaver.BukkitBookSaverMain;
 
@@ -28,13 +28,14 @@ public class SaveBookCommand implements CommandExecutor, TabCompleter {
         }
         
         Player p = (Player) sender;
+        ItemStack i = p.getInventory().getItemInMainHand();
         
-        if(this.pl.getSaver().isValidBook(p.getItemInHand())) {
+        if(!this.pl.getSaver().isValidBook(i)) {
             p.sendMessage(ChatColor.RED + "You must have a written book in hand.");
             return true;
         }
         
-        pl.getSaver().saveBook(p, (BookMeta)p.getItemInHand().getItemMeta());
+        pl.getSaver().saveBook(p, i);
 
         return true;
     }
