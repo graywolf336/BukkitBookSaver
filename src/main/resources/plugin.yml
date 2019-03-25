@@ -14,3 +14,5 @@ commands:
         description: Saves all of the books inside of the chest a player is looking at.
     books-load-serialized:
         description: Loads a serialized book.
+    books-load-json:
+        description: Loads a json seralized book.

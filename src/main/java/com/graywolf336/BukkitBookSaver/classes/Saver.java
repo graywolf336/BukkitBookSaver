@@ -2,8 +2,11 @@ package com.graywolf336.BukkitBookSaver.classes;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
@@ -52,7 +55,7 @@ public class Saver {
         }
         
         String ext = Settings.JSON.asBoolean() ? ".json" : ".txt";
-        File f = new File(this.pl.getSavesFolder(), book.getAuthor() + "-" + book.getTitle() + ext);
+        File f = new File(this.pl.getSavesFolder(), book.getAuthor() + "-" + book.getTitle().replaceAll(" ", "_") + ext);
         
         if (f.exists()) {
             if (sender.isOp()) {
@@ -65,10 +68,9 @@ public class Saver {
         
         if (Settings.JSON.asBoolean()) {
             try {
-                f.createNewFile();
-                BufferedWriter b = new BufferedWriter(new FileWriter(f));
-                b.write(this.objectMapper.writeValueAsString(book));
-                b.close();
+            	OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(f), Charset.forName("UTF-8"));
+            	osw.write(this.objectMapper.writeValueAsString(book));
+            	osw.close();
             } catch (Exception e) {
                 e.printStackTrace();
                 sender.sendMessage(ChatColor.RED + "Failure! " + e.getClass().getSimpleName());
@@ -77,7 +79,7 @@ public class Saver {
         } else {
             try {
                 f.createNewFile();
-                BufferedWriter b = new BufferedWriter(new FileWriter(f));
+                BufferedWriter b = new BufferedWriter(new PrintWriter(f));
                 
                 b.write("-------------- INFO --------------");
                 b.newLine();
@@ -155,5 +157,27 @@ public class Saver {
         FileConfiguration sf = YamlConfiguration.loadConfiguration(sfile);
         
         return sf.getItemStack("book");
+    }
+    
+    public ArrayList<String> getJsonBooks() {
+    	ArrayList<String> books = new ArrayList<String>();
+
+    	for(File f : this.pl.getSavesFolder().listFiles()) {
+    		if (f.isFile() && f.getName().endsWith(".json")) {
+    			books.add(f.getName());
+    		}
+    	}
+    	
+    	return books;
+    }
+    
+    public ItemStack getJsonBook(String name) throws Exception {
+    	File sfile = new File(this.pl.getSavesFolder(), name);
+    	
+    	if (!sfile.exists() || sfile.isDirectory()) {
+    		throw new Exception("Invalid book name, it wasn't saved");
+        }
+
+    	return this.objectMapper.readValue(sfile, Book.class).toItem();
     }
 }

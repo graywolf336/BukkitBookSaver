@@ -5,6 +5,7 @@ import java.io.File;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.graywolf336.BukkitBookSaver.classes.Saver;
+import com.graywolf336.BukkitBookSaver.cmds.LoadJsonBookCommand;
 import com.graywolf336.BukkitBookSaver.cmds.LoadSerializedBookCommand;
 import com.graywolf336.BukkitBookSaver.cmds.ReloadBookSaverCommand;
 import com.graywolf336.BukkitBookSaver.cmds.SaveBookCommand;
@@ -38,6 +39,7 @@ public class BukkitBookSaverMain extends JavaPlugin {
 		this.getCommand("reload-book-saver").setExecutor(new ReloadBookSaverCommand(this));
 		this.getCommand("books-save-in-chest").setExecutor(new SaveBooksInChestCommand(this));
 		this.getCommand("books-load-serialized").setExecutor(new LoadSerializedBookCommand(this));
+		this.getCommand("books-load-json").setExecutor(new LoadJsonBookCommand(this));
 
 		this.getLogger().info("Saving all the books, one book at a time!");
 	}

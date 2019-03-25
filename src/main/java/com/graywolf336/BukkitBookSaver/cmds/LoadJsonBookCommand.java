@@ -14,10 +14,10 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
-public class LoadSerializedBookCommand implements CommandExecutor {
+public class LoadJsonBookCommand implements CommandExecutor {
 	private BukkitBookSaverMain pl;
 	
-	public LoadSerializedBookCommand(BukkitBookSaverMain plugin) {
+	public LoadJsonBookCommand(BukkitBookSaverMain plugin) {
 		this.pl = plugin;
 	}
 	
@@ -29,11 +29,11 @@ public class LoadSerializedBookCommand implements CommandExecutor {
 		
 		if (args.length == 0) {
 			sender.sendMessage(ChatColor.GREEN + "List of Seralized Books:");
-			for(String s : this.pl.getSaver().getSeralizedBooks()) {
+			for(String s : this.pl.getSaver().getJsonBooks()) {
 				TextComponent msg = new TextComponent();
 				msg.setColor(ChatColor.DARK_AQUA);
 				msg.setText(" - " + s);
-				msg.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/books-load-serialized " + s));
+				msg.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/books-load-json " + s));
 				msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Loads the book!").create()));
 
 				sender.spigot().sendMessage(msg);
@@ -43,7 +43,7 @@ public class LoadSerializedBookCommand implements CommandExecutor {
 		
 		try {
 			Player p = (Player) sender;
-			ItemStack i = this.pl.getSaver().getSeralizedBook(args[0]);
+			ItemStack i = this.pl.getSaver().getJsonBook(args[0]);
 			
 			p.getInventory().addItem(i);
 			sender.sendMessage(ChatColor.DARK_GREEN + "Successfully loaded " + args[0] + "!");
