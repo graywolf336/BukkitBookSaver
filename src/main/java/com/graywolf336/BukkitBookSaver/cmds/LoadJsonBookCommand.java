@@ -22,7 +22,7 @@ public class LoadJsonBookCommand implements CommandExecutor {
 	}
 	
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if (!sender.isOp() || !(sender instanceof Player)) {
+		if (!sender.hasPermission("book-load") || !(sender instanceof Player)) {
 			sender.sendMessage(ChatColor.RED + "You are not allowed to do this action of which you have committed to doing!");
             return true;
 		}

@@ -27,6 +27,11 @@ public class SaveBookCommand implements CommandExecutor, TabCompleter {
             return true;
         }
         
+        if (sender.hasPermission("book-save")) {
+        	sender.sendMessage(ChatColor.RED + "You are not allowed to do this action of which you have committed to doing!");
+        	return true;
+        }
+        
         Player p = (Player) sender;
         ItemStack i = p.getInventory().getItemInMainHand();
         

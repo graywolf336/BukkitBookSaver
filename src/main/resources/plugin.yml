@@ -5,6 +5,13 @@ description: Need written books to be saved to file? I am your solution.
 authors: [graywolf336]
 load: POSTWORLD
 api-version: 1.13
+permissions:
+  book-save:
+    description: Allows a player to save a book to file
+    default: op
+  book-load:
+    description: Allows a player to load a book from file
+    default: op
 commands:
     book-save:
         description: Saves a book to file.

@@ -25,6 +25,11 @@ public class SaveBooksInChestCommand implements CommandExecutor {
             return true;
         }
         
+        if (sender.hasPermission("book-save")) {
+        	sender.sendMessage(ChatColor.RED + "You are not allowed to do this action of which you have committed to doing!");
+        	return true;
+        }
+        
         Player p = (Player) sender;
         Block target = p.getTargetBlock(null, 10);
         
