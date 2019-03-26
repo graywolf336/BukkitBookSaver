@@ -74,12 +74,18 @@ public class Book {
     	ItemStack i = new ItemStack(Material.WRITTEN_BOOK);
     	
     	BookMeta m = (BookMeta) i.getItemMeta();
-    	m.setAuthor(this.author);
-    	m.setTitle(this.title);
+    	m.setAuthor(ChatColor.stripColor(this.author));
+    	m.setTitle(ChatColor.stripColor(this.title.length() > 32 ? this.title.substring(0, 32) : this.title));
     	
     	for (String p : this.colorizedPages) {
     		m.addPage(p);
     	}
+    	
+    	ArrayList<String> lore = new ArrayList<String>();
+    	lore.add(ChatColor.GREEN + "" + ChatColor.BOLD + "Title: " + ChatColor.RESET + this.title);
+    	lore.add(ChatColor.GREEN + "" + ChatColor.BOLD + "Author: " + ChatColor.RESET + this.author);
+    	
+    	m.setLore(lore);
     	
     	i.setItemMeta(m);
     	

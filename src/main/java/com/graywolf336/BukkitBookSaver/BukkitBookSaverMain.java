@@ -25,10 +25,12 @@ public class BukkitBookSaverMain extends JavaPlugin {
 		this.count = 0;
 		this.getDataFolder().mkdirs();
 		
-		this.savesFolder = new File(this.getDataFolder(), "books");
+		File books = new File(this.getDataFolder(), "books");
+		
+		this.savesFolder = new File(books, "json");
 		this.savesFolder.mkdirs();
 		
-		this.serializedFolder = new File(this.savesFolder, "seralized");
+		this.serializedFolder = new File(books, "seralized");
 		this.serializedFolder.mkdirs();
 		
 		this.saver = new Saver(this);

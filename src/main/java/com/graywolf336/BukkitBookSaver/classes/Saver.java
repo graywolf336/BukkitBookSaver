@@ -1,11 +1,9 @@
 package com.graywolf336.BukkitBookSaver.classes;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
@@ -54,8 +52,7 @@ public class Saver {
             return false;
         }
         
-        String ext = Settings.JSON.asBoolean() ? ".json" : ".txt";
-        File f = new File(this.pl.getSavesFolder(), book.getAuthor() + "-" + book.getTitle().replaceAll(" ", "_") + ext);
+        File f = new File(this.pl.getSavesFolder(), book.getAuthor() + "-" + book.getTitle().replaceAll(" ", "_") + ".json");
         
         if (f.exists()) {
             if (sender.isOp()) {
@@ -66,41 +63,14 @@ public class Saver {
             }
         }
         
-        if (Settings.JSON.asBoolean()) {
-            try {
-            	OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(f), Charset.forName("UTF-8"));
-            	osw.write(this.objectMapper.writeValueAsString(book));
-            	osw.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-                sender.sendMessage(ChatColor.RED + "Failure! " + e.getClass().getSimpleName());
-                return false;
-            }
-        } else {
-            try {
-                f.createNewFile();
-                BufferedWriter b = new BufferedWriter(new PrintWriter(f));
-                
-                b.write("-------------- INFO --------------");
-                b.newLine();
-                b.write("Author: " + book.getAuthor());
-                b.write("Title: " + book.getTitle());
-                b.newLine();
-
-                int page = 1;
-                for(String s : book.getPages()) {
-                    b.write("-------------- PAGE " + page + " --------------");
-                    b.newLine();
-                    b.write(s);
-                    b.newLine();
-                    page++;
-                }
-                b.close();
-            } catch(Exception e) {
-                e.printStackTrace();
-                sender.sendMessage(ChatColor.RED + "Failure! " + e.getClass().getSimpleName());
-                return false;
-            }
+        try {
+        	OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(f), Charset.forName("UTF-8"));
+        	osw.write(this.objectMapper.writeValueAsString(book));
+        	osw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            sender.sendMessage(ChatColor.RED + "Failure! " + e.getClass().getSimpleName());
+            return false;
         }
         
         if (Settings.SERIALIZED.asBoolean()) {
